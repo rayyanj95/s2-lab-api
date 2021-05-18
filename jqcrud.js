@@ -1,8 +1,8 @@
 $(function(){
-    loadData();
-    $("#recipes").on("click",".btn-danger",handleDelete);
-    $("#recipes").on("click",".btn-warning",handleUpdate);
-    $("#addBtn").click(addRecipe);
+    loadProducts();
+    $("#addBtn").click(addProducts);
+    $("#products").on("click",".btn-danger",handleDelete);
+    $("#products").on("click",".btn-warning",handleUpdate);
     $("#updateSave").click(function(){
         var id = $("$updateId").val();
         var title = $("$updateTitle").val();
@@ -13,34 +13,48 @@ $(function(){
             method:"PUT",
             success:{function(response){
                 console.log(response);
-                loadData();
+                loadProducts();
                 $("updateModal").modal("hide");
             }}
         });
     });
 });
 function handleUpdate(){
-    $("updateModal").modal("show");
     var btn = $(this);
-    var parentDiv = btn.closest(".recipe");
-    let id = parentDiv.attr("data-id");
-    $.get("https://usman-recipes.herokuapp.com/api/products/" + id,function(response){
-        $("#updateId").val(response._id);
-        $("#updateTitle").val(response.title);
-        $("#updateBody").val(response.body);
-        $("#updateModal").modal("show");
-    })
+  var parentDiv = btn.closest(".product");
+  let id = parentDiv.attr("data-id");
+
+  $.get(
+    "https://usman-recipes.herokuapp.com/api/products/" + id,
+    function (response) {
+      $("#updateID").val(response._id);
+      $("#updateName").val(response.name);
+      $("#updatePrice").val(response.price);
+      $("#updateColor").val(response.color);
+      $("#updateDepartment").val(response.department);
+      $("#updateDescription").val(response.description);
+      $("#updateProduct").modal("show");
+    }
+  );
 }
-function addRecipe(title,details){
-    var title = $("#title").val();
-    var details = $("#details").val();
+
+function addProducts(title,details){
+    var name=$("#name").val();
+    var department=$("#department").val();
+    var color=$("#color").val();
+    var description=$("#description").val();
+    var price=$("#price").val();
     $.ajax({
         url: "https://usman-recipes.herokuapp.com/api/products/",
         method: "POST",
-        data: {name:title, details:body} ,
+        data: {name,department,color,description,price} ,
         success: function(response){
-            console.log(response);
-            loadData();
+            $("#name").val('');
+            $("#department").val('');
+            $("#color").val('');
+            $("#description").val('');
+            $("#price").val('');
+            loadProducts();
         },
         error:function(){
             alert("Failed to add new Recipe");
@@ -49,33 +63,30 @@ function addRecipe(title,details){
 }
 function handleDelete(){
     var btn = $(this);
-    var parentDiv = btn.closest(".recipe");
+    var parentDiv = btn.closest(".product");
     let id = parentDiv.attr("data-id");
     console.log(id);
     $.ajax({
         url: "https://usman-recipes.herokuapp.com/api/products/"+id,
         method: "DELETE",
         success:function(){
-            loadData();
+            loadProducts();
         }
     });
 }
-function loadData() {
+function loadProducts() {
     $.ajax({
         url: "https://usman-recipes.herokuapp.com/api/products/",
         method: "GET",
         error:function(response){
-            var recipes = $("#recipes");
-            recipes.html("Unkown Error Occured.");
+            alert("Unkown Error Occured.");
         },
         success: function(response) {
-            console.log(response);
-            var recipes = $("#recipes");
-            recipes.empty();
+            var products = $("#products");
+            products.empty();
             for(var i=0; i< response.length; i++){
-                var rec = response[i];
-                recipes.append(`<div class="recipe" data-id="${rec._id}"><h3> ${rec.title} </h3><p><button class="btn btn-danger btn-sm float-right">Delete</button> <button class="btn btn-warning btn-sm float-right">Edit</button>${rec.body}</p></div>`); 
-            }
+                var pro = response[i];
+                products.append(`<div class="product" data-id="${pro._id}"> <h3>${pro.name}</h3> <p><button class="btn btn-danger btn-sm float-right">delete</button><button class="btn btn-warning btn-sm float-right">Edit</button>Department: ${pro.department}</br>Color: ${pro.color}</br>Price: ${pro.price}</br>Discription: ${pro.description}</p></div>`);            }
             
         }
     });
