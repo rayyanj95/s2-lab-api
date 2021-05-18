@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script src="./popper.min.js"></script>
+    <script src="./bootstrap.min.js"></script>
+    <script src="./jqcrud.js"></script>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="jqstyles.css">
+    <title>Restful API</title>
+</head>
+<body class="container">
+    <h1>Restful API</h1>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text"
+          class="form-control" name="title" id="title" aria-describedby="helpId" placeholder="Recipe Title">
+        <small id="helpId" class="form-text text-muted">Enter Title</small>
+      </div>
+  
+      <div class="form-group">
+        <label for="details">Details</label>
+        <input type="text"
+          class="form-control" name="details" id="details" aria-describedby="helpId" placeholder="Recipe Details">
+        <small id="bodyHelp" class="form-text text-muted">Enter Details</small>
+      </div>
+      <button id = "addBtn" class="btn btn-info">Add Entry</button>
+      <div id="recipes">
+          The data will be loaded here...
+      </div>
+     
+</body>
+</html>
